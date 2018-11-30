@@ -1,0 +1,23 @@
+---
+
+- name: establish dependencies
+  package:
+    name: git
+    state: present
+
+- name: establish vim
+  package:
+    name: vim
+    state: latest
+
+- name: establish vundle plugin manager
+  git:
+    repo: https://github.com/VundleVim/Vundle.vim.git
+    dest: ~/.vim/bundle/Vundle.vim
+    update: yes
+  when: plugin_manager == 'vundle' 
+
+- name: establish .vimrc
+  template:
+    src: vimrc
+    dest: ~/.vimrc

@@ -1,0 +1,44 @@
+" {{ ansible_managed }}
+
+set nocompatible     " be iMproved, required (vundle)
+filetype off         " required (vundle), turns off filetype
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim' " let Vundle manage Vundle, required
+
+" custom plugins
+{% for plugin in plugins -%}
+{{ "Plugin '%s'\n" | format(plugin['name']) }}
+{% endfor -%}
+
+call vundle#end()            
+
+filetype plugin indent on    " required (vundle) - turns on filetype
+" set tabstop=4
+" set shiftwidth=4
+" set expandtab
+
+
+colorscheme default
+set number
+
+
+" Custom functions
+"
+" word processor
+func! WordProcessorMode()
+ setlocal textwidth=80
+ setlocal smartindent
+ setlocal spell spelllang=en_us
+ setlocal noexpandtab
+endfu
+
+com! WP call WordProcessorMode()
+
+
+" Generic settings
+" colorscheme darkblue
