@@ -1,23 +1,39 @@
 ---
 
 - name: establish dependencies
+  become: yes
   package:
     name: git
     state: present
 
-- name: establish vim
+- name: establish editor
+  become: yes
   package:
-    name: vim
+    name: "{{ flavor }}"
     state: latest
 
-- name: establish vundle plugin manager
-  git:
-    repo: https://github.com/VundleVim/Vundle.vim.git
-    dest: ~/.vim/bundle/Vundle.vim
-    update: yes
-  when: plugin_manager == 'vundle' 
+- name: ensure config path presence
+  file:
+    path: "{{ flavor_info[flavor]['config']['path'] }}"
+    state: directory
 
-- name: establish .vimrc
+- name: establish editor configuration 
   template:
     src: vimrc
-    dest: ~/.vimrc
+    dest: "{{ flavor_info[flavor]['config']['file'] }}"
+  register: vimrc
+
+- name: establish plugin manager
+  git:
+    repo: "{{ plugin_manager_repo[plugin_manager] }}"
+    dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ plugin_manager }}"
+    update: yes
+  when: plugin_manager in plugin_manager_repo 
+
+- name: load plugins
+  shell: "{{ flavor_info[flavor]['command'] }} +PluginInstall +qall"
+  when: vimrc.changed
+
+- include_tasks: plugins.yml
+  when: vimrc.changed
+

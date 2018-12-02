@@ -1,44 +1,107 @@
 " {{ ansible_managed }}
 
+{% if plugin_manager == 'vundle' -%}
 set nocompatible     " be iMproved, required (vundle)
 filetype off         " required (vundle), turns off filetype
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+if has('nvim')
+    let s:editor_root=expand("{{ flavor_info['neovim']['config']['path'] }}")
+else
+    let s:editor_root=expand("{{ flavor_info['vim']['config']['path'] }}/")
+endif
 
-call vundle#begin()
+" set the runtime path to include Vundle and initialize
+" set rtp+={{ flavor_info[flavor]['config']['path'] }}/bundle/vundle
+let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
+
+call vundle#begin(s:editor_root . '/bundle')
 
 Plugin 'VundleVim/Vundle.vim' " let Vundle manage Vundle, required
 
 " custom plugins
 {% for plugin in plugins -%}
-{{ "Plugin '%s'\n" | format(plugin['name']) }}
-{% endfor -%}
+{{ "Plugin '%s'" | format(plugin['name']) }}
+{% endfor %}
 
-call vundle#end()            
+call vundle#end()
+{%- endif %}
 
 filetype plugin indent on    " required (vundle) - turns on filetype
-" set tabstop=4
-" set shiftwidth=4
-" set expandtab
-
-
-colorscheme default
-set number
-
-
-" Custom functions
-"
-" word processor
-func! WordProcessorMode()
- setlocal textwidth=80
- setlocal smartindent
- setlocal spell spelllang=en_us
- setlocal noexpandtab
-endfu
-
-com! WP call WordProcessorMode()
-
 
 " Generic settings
-" colorscheme darkblue
+{% if 'set' in settings -%}
+{% if 'value' in settings['set'] -%}
+{%- for k, v in settings['set']['value'].items() -%}
+{{ "set %s=%s" | format(k, v) }}
+{% endfor -%}
+{%- endif -%}
+{% if 'property' in settings['set'] -%}
+{%- for p in settings['set']['property'] -%}
+{{ "set %s" | format(p) }}
+{% endfor -%}
+{%- endif -%}
+{%- endif -%}
+{% if 'let' in settings -%}
+{%- for k, v in settings['let'].items() -%}
+{{ "let %s=%s" | format(k, v) }}
+{% endfor -%}
+{%- endif -%}
+{% if 'other' in settings -%}
+{%- for o in settings['other'] -%}
+{{ "%s" | format(o) }}
+{% endfor -%}
+{%- endif %}
+
+
+" Custom configuration
+{% for plugin in plugins %}
+{% if plugin.__len__() > 1 %}
+" plugin {{ plugin['name'] }}
+{% if 'set' in plugin -%}
+{% if 'value' in plugin['set'] -%}
+{%- for k, v in plugin['set']['value'].items() -%}
+{{ "set %s=%s" | format(k, v) }}
+{% endfor -%}
+{%- endif -%}
+{% if 'property' in plugin['set'] -%}
+{%- for p in plugin['set']['property'] -%}
+{{ "set %s" | format(p) }}
+{% endfor -%}
+{%- endif -%}
+{%- endif -%}
+{% if 'let' in plugin -%}
+{%- for k, v in plugin['let'].items() -%}
+{{ "let %s=%s" | format(k, v) }}
+{% endfor -%}
+{%- endif -%}
+{% if 'other' in plugin -%}
+{%- for o in plugin['other'] -%}
+{{ "%s" | format(o) }}
+{% endfor -%}
+{%- endif %}
+
+{% endif -%}
+{% endfor %}
+
+" Custom functions
+{% for plugin in plugins %}
+{% if 'function' in plugin -%}
+" plugin {{ plugin['name'] }}
+{%- for f in plugin['function'] -%}
+{{ "%s" | format(f) }}
+{% endfor %}
+
+{% endif -%}
+{% endfor %}
+
+" word processor
+func! WordProcessorMode()
+  setlocal textwidth=80
+  setlocal smartindent
+  setlocal spell spelllang=en_us
+  setlocal noexpandtab
+endfu
+
+com! WordProcessor call WordProcessorMode()
+
+

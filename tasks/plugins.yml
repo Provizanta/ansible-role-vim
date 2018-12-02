@@ -1,0 +1,7 @@
+---
+
+- name: setup YouCompleteMe
+  shell: python3 install.py --clang-completer
+  args:
+    chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
+  when: "'Valloric/YouCompleteMe' in lookup('template', 'plugins.j2')"

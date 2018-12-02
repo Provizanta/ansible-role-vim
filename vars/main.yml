@@ -1,0 +1,16 @@
+---
+
+flavor_info:
+  vim:
+    command: 'vim'
+    config:
+      file: ~/.vimrc
+      path: ~/.vim/
+  neovim:
+    command: 'nvim'
+    config:
+      file: ~/.config/nvim/init.vim
+      path: ~/.config/nvim/
+
+plugin_manager_repo:
+  vundle: https://github.com/VundleVim/Vundle.vim.git
