@@ -1,7 +1,21 @@
 ---
 
+- set_fact:
+    all_plugin_names: "{{ lookup('template', 'plugins.j2') }}"
+
 - name: setup YouCompleteMe
   shell: python3 install.py --clang-completer
   args:
     chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
-  when: "'Valloric/YouCompleteMe' in lookup('template', 'plugins.j2')"
+  when: "'Valloric/YouCompleteMe' in all_plugin_names"
+
+- name: setup Syntastic
+  become: yes
+  package:
+    name: "{{ item }}"
+    state: present 
+  with_items:
+    - pylint
+    - pylint3
+    - shellcheck
+  when: "'vim-syntastic/syntastic' in all_plugin_names"
