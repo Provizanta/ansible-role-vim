@@ -28,58 +28,40 @@ call vundle#end()
 
 filetype plugin indent on    " required (vundle) - turns on filetype
 
-" Generic settings
-{% if 'set' in settings -%}
-{% if 'value' in settings['set'] -%}
-{%- for k, v in settings['set']['value'].items() -%}
+{% macro element_config(element) -%}
+{% if 'set' in element -%}
+{% if 'value' in element['set'] -%}
+{%- for k, v in element['set']['value'].items() -%}
 {{ "set %s=%s" | format(k, v) }}
 {% endfor -%}
 {%- endif -%}
-{% if 'property' in settings['set'] -%}
-{%- for p in settings['set']['property'] -%}
+{% if 'property' in element['set'] -%}
+{%- for p in element['set']['property'] -%}
 {{ "set %s" | format(p) }}
 {% endfor -%}
 {%- endif -%}
 {%- endif -%}
-{% if 'let' in settings -%}
-{%- for k, v in settings['let'].items() -%}
+{% if 'let' in element -%}
+{%- for k, v in element['let'].items() -%}
 {{ "let %s=%s" | format(k, v) }}
 {% endfor -%}
 {%- endif -%}
-{% if 'other' in settings -%}
-{%- for o in settings['other'] -%}
+{% if 'other' in element -%}
+{%- for o in element['other'] -%}
 {{ "%s" | format(o) }}
 {% endfor -%}
 {%- endif %}
 
+{%- endmacro %}
+
+" Generic settings
+{{ element_config(settings) }}
 
 " Custom configuration
 {% for plugin in plugins %}
 {% if plugin.__len__() > 1 %}
 " plugin {{ plugin['name'] }}
-{% if 'set' in plugin -%}
-{% if 'value' in plugin['set'] -%}
-{%- for k, v in plugin['set']['value'].items() -%}
-{{ "set %s=%s" | format(k, v) }}
-{% endfor -%}
-{%- endif -%}
-{% if 'property' in plugin['set'] -%}
-{%- for p in plugin['set']['property'] -%}
-{{ "set %s" | format(p) }}
-{% endfor -%}
-{%- endif -%}
-{%- endif -%}
-{% if 'let' in plugin -%}
-{%- for k, v in plugin['let'].items() -%}
-{{ "let %s=%s" | format(k, v) }}
-{% endfor -%}
-{%- endif -%}
-{% if 'other' in plugin -%}
-{%- for o in plugin['other'] -%}
-{{ "%s" | format(o) }}
-{% endfor -%}
-{%- endif %}
-
+{{ element_config(plugin) }}
 {% endif -%}
 {% endfor %}
 
