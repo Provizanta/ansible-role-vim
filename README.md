@@ -11,20 +11,14 @@ None
 Role Variables
 --------------
 
-    flavor: <vim flavor to be used>
+    flavor: <vim flavor to be used, vim|nvim>
     plugin_manager: <used plugin manager, default: vundle>
-    set:
-      value: <key values pair prefixed with set>
-      property: <property prefixed with set>
-    let: <key value pair prefixed with let>
-    other: <a single line to be written to the config file>
-    plugins: <list of plugins>
+    configuration:
+      - name:
+        block: <configuration blocks as multi-line text> 
+    plugins: 
       - name: <plugin name>
-        set:
-          value: <key values pair prefixed with set>
-          property: <property prefixed with set>
-        let: <key value pair prefixed with let>
-        other: <a single line to be written to the config file>
+        settings: <string< settings multi-line text
 
 Dependencies
 ------------
@@ -38,13 +32,16 @@ Example Playbook
       roles:
         - role: vim
           vars:
-            let:
-              key: value
+            configuration:
+              - name: configuration block title
+                block: |
+                  set clipboard=unnamed
+                  set backspace=indent,eol,start
             plugin_manager: vundle
             plugins:
               - name: 'WhoeverItIs/HisPlugin'
-                set:
-                  key: value
+                settings: |
+                  set value         # nicely formatted string
 
 
 License

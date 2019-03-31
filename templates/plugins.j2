@@ -1,5 +1,0 @@
-{% set list_of_plugins = [] -%}
-{%- for plugin in plugins -%}
-  {{- list_of_plugins.append(plugin['name']) -}}
-{%- endfor -%}
-{{ list_of_plugins }}

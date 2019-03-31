@@ -1,39 +1,41 @@
 ---
 
-- name: establish dependencies
+- name: establish packages
   become: yes
   package:
-    name: git
+    name: 
+      - git
+      - "{{ flavor }}"
     state: present
-
-- name: establish editor
-  become: yes
-  package:
-    name: "{{ flavor }}"
-    state: latest
+  tags: install
 
 - name: ensure config path presence
   file:
     path: "{{ flavor_info[flavor]['config']['path'] }}"
     state: directory
+  tags: install
 
 - name: establish editor configuration 
   template:
-    src: vimrc
+    src: vimrc.j2
     dest: "{{ flavor_info[flavor]['config']['file'] }}"
   register: vimrc
+  tags: configure
 
 - name: establish plugin manager
+  when: plugin_manager in plugin_manager_repo 
   git:
     repo: "{{ plugin_manager_repo[plugin_manager] }}"
     dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ plugin_manager }}"
     update: yes
-  when: plugin_manager in plugin_manager_repo 
+  tags: configure
 
 - name: load plugins
-  shell: "{{ flavor_info[flavor]['command'] }} +PluginInstall +qall"
   when: vimrc.changed
+  shell: "{{ flavor_info[flavor]['command'] }} +PluginInstall +qall"
+  tags: configure
 
 - include_tasks: plugins.yml
   when: vimrc.changed
+  tags: configure
 

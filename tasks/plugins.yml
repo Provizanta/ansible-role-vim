@@ -3,28 +3,30 @@
 - name: establish dependencies
   become: yes
   package:
-    name: "{{ item }}"
+    name:
+      - cmake
+      - python3-dev
     state: present
-  with_items:
-    - cmake
-    - python3-dev
+  tags: install
 
 - set_fact:
-    all_plugin_names: "{{ lookup('template', 'plugins.j2') }}"
+    plugin_list: "{{ plugins | map(attribute='name') | list }}"
+  tags: configure
 
 - name: setup YouCompleteMe
+  when: "'Valloric/YouCompleteMe' in plugin_list"
   shell: python3 install.py --clang-completer
   args:
     chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
-  when: "'Valloric/YouCompleteMe' in all_plugin_names"
+  tags: configure
 
 - name: setup Syntastic
+  when: "'vim-syntastic/syntastic' in plugin_list"
   become: yes
   package:
-    name: "{{ item }}"
+    name: 
+      - pylint
+      - pylint3
+      - shellcheck
     state: present 
-  with_items:
-    - pylint
-    - pylint3
-    - shellcheck
-  when: "'vim-syntastic/syntastic' in all_plugin_names"
+  tags: configure
