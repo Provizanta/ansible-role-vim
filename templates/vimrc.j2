@@ -35,7 +35,10 @@ filetype plugin indent on    " required (vundle) - turns on filetype
 
 " Custom plugin configuration
 {% for plugin in plugins %}
-" plugin {{ plugin['name'] }}
+{%- if 'settings' in plugin -%}
+{{- '" plugin %s\n' | format(plugin['name']) if 'name' in plugin else '' -}}
 {{ plugin['settings'] }}
+
+{% endif -%}
 {% endfor %}
 

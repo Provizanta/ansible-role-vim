@@ -41,7 +41,7 @@ Example Playbook
             plugins:
               - name: 'WhoeverItIs/HisPlugin'
                 settings: |
-                  set value         # nicely formatted string
+                  set value         " nicely formatted string
 
 
 License

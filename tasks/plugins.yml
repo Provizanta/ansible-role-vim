@@ -13,11 +13,18 @@
     plugin_list: "{{ plugins | map(attribute='name') | list }}"
   tags: configure
 
-- name: setup YouCompleteMe
-  when: "'Valloric/YouCompleteMe' in plugin_list"
-  shell: python3 install.py --clang-completer
-  args:
-    chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
+- when: "'Valloric/YouCompleteMe' in plugin_list"
+  block:
+    - name: load repo
+      shell: "git submodule update --init --recursive"
+      args: 
+        chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
+        creates: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/third_party/ycmd/build.py"
+
+    - name: setup YouCompleteMe
+      shell: python3 install.py --clang-completer
+      args:
+        chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
   tags: configure
 
 - name: setup Syntastic

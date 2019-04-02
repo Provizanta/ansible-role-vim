@@ -19,6 +19,7 @@
   template:
     src: vimrc.j2
     dest: "{{ flavor_info[flavor]['config']['file'] }}"
+    validate: "vim -E -s -u NONE -c 'try | source %s | catch | cq | endtry | q'"
   register: vimrc
   tags: configure
 
