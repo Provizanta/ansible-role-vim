@@ -11,7 +11,7 @@ None
 Role Variables
 --------------
 
-    flavor: <vim flavor to be used, vim|nvim>
+    flavor: <vim flavor to be used, vim|vim-gtk3|nvim>
     plugin_manager: <used plugin manager, default: vundle>
     configuration:
       - name:

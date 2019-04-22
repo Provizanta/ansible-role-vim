@@ -35,5 +35,6 @@
       - pylint
       - pylint3
       - shellcheck
+      - yamllint
     state: present 
   tags: configure
