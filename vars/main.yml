@@ -6,6 +6,11 @@ flavor_info:
     config:
       file: ~/.vimrc
       path: ~/.vim/
+  vim-gtk3:
+    command: 'vim'
+    config:
+      file: ~/.vimrc
+      path: ~/.vim/
   neovim:
     command: 'nvim'
     config:

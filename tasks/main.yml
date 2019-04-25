@@ -1,9 +1,9 @@
 ---
 
 - name: establish packages
-  become: yes
+  become: true
   package:
-    name: 
+    name:
       - git
       - "{{ flavor }}"
     state: present
@@ -15,7 +15,7 @@
     state: directory
   tags: install
 
-- name: establish editor configuration 
+- name: establish editor configuration
   template:
     src: vimrc.j2
     dest: "{{ flavor_info[flavor]['config']['file'] }}"
@@ -23,11 +23,11 @@
   tags: configure
 
 - name: establish plugin manager
-  when: plugin_manager in plugin_manager_repo 
+  when: plugin_manager in plugin_manager_repo
   git:
     repo: "{{ plugin_manager_repo[plugin_manager] }}"
     dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ plugin_manager }}"
-    update: yes
+    update: true
   tags: configure
 
 - name: load plugins
@@ -38,4 +38,3 @@
 - include_tasks: plugins.yml
   when: vimrc.changed
   tags: configure
-
