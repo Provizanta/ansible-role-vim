@@ -1,7 +1,7 @@
-Vim
+Ansible role: vim
 =========
 
-Vim editor setup.
+Install and configure vim or its flavors (e.g. nvim). Use a specific plugin manager - only 'vundle' is supported at the moment.
 
 Requirements
 ------------
@@ -11,14 +11,20 @@ None
 Role Variables
 --------------
 
-    flavor: <vim flavor to be used, vim|vim-gtk3|nvim>
-    plugin_manager: <used plugin manager, default: vundle>
+These defaults are set in defaults/main.yml:
+
+    flavor: vim   # vim|vim-gtk3|nvim
+
+    plugin_manager: vundle
+
+Non-defaulted variables that can be set:
+
     configuration:
-      - name:
-        block: <configuration blocks as multi-line text> 
-    plugins: 
-      - name: <plugin name>
-        settings: <string< settings multi-line text
+      - name: <string, configuration block name>
+        block: <string, configuration blocks as multi-line text>
+    plugins:
+      - name: <string, plugin name>
+        settings: <string, settings as multi-line text>
 
 Dependencies
 ------------
@@ -39,10 +45,9 @@ Example Playbook
                   set backspace=indent,eol,start
             plugin_manager: vundle
             plugins:
-              - name: 'WhoeverItIs/HisPlugin'
-                settings: |
-                  set value         " nicely formatted string
-
+              - name: 'Valloric/YouCompleteMe'
+                setttings: |
+                  set encoding=utf-8
 
 License
 -------
@@ -52,4 +57,4 @@ MIT
 Author Information
 ------------------
 
-Tibor Csoka
+Tibor Csóka

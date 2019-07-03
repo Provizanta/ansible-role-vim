@@ -1,5 +1,5 @@
 ---
 
-flavor: vim
+flavor: vim   # vim|vim-gtk3|nvim
 
 plugin_manager: vundle

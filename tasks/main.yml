@@ -1,5 +1,8 @@
 ---
 
+- name: normalize os
+  include_tasks: normalize.yml
+
 - name: establish packages
   become: true
   package:
@@ -10,19 +13,25 @@
   tags: install
 
 - name: ensure config path presence
+  become_user: "{{ ansible_user | default('root') }}"
+  become: true
   file:
     path: "{{ flavor_info[flavor]['config']['path'] }}"
     state: directory
   tags: install
 
 - name: establish editor configuration
+  become_user: "{{ ansible_user | default('root') }}"
+  become: true
   template:
     src: vimrc.j2
     dest: "{{ flavor_info[flavor]['config']['file'] }}"
   register: vimrc
   tags: configure
 
-- name: establish plugin manager
+- name: establish plugin manager   # noqa 401
+  become_user: "{{ ansible_user | default('root') }}"
+  become: true
   when: plugin_manager in plugin_manager_repo
   git:
     repo: "{{ plugin_manager_repo[plugin_manager] }}"
@@ -30,11 +39,14 @@
     update: true
   tags: configure
 
-- name: load plugins
-  when: vimrc.changed
-  shell: "{{ flavor_info[flavor]['command'] }} +PluginInstall +qall"
-  tags: configure
+- when: vimrc.changed
+  block:
+    - name: load plugins
+      become_user: "{{ ansible_user | default('root') }}"
+      become: true
+      command: "{{ flavor_info[flavor]['command'] }} +PluginInstall +qall"
+      changed_when: false
+      tags: configure
 
-- include_tasks: plugins.yml
-  when: vimrc.changed
-  tags: configure
+    - include_tasks: prepare_plugins.yml
+      tags: configure

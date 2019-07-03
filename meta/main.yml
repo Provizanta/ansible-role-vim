@@ -1,0 +1,31 @@
+---
+
+galaxy_info:
+  role_name: vim
+  author: Tibor Csóka
+  description: |
+    "Establish vim with the specified plugins and configuration."
+  company: ""
+
+  license: MIT
+
+  min_ansible_version: 2.7.1
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+        - cosmic
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+
+  galaxy_tags:
+    - vim
+    - nvim
+    - gvim
+    - vundle
+
+dependencies: []

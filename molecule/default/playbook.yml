@@ -1,0 +1,17 @@
+---
+
+- name: Converge
+  hosts: all
+  roles:
+    - role: vim
+      vars:
+        configuration:
+          - name: configuration block title
+            block: |
+              set clipboard=unnamed
+              set backspace=indent,eol,start
+        plugin_manager: vundle
+        plugins:
+          - name: 'Valloric/YouCompleteMe'
+            setttings: |
+              set encoding=utf-8

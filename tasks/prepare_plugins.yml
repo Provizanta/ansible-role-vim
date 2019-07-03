@@ -1,0 +1,38 @@
+---
+
+- name: establish dependencies
+  become: true
+  package:
+    name:
+      - cmake
+      - python3-dev
+    state: present
+  tags: install
+
+- name: prepare plugin facts
+  set_fact:
+    plugin_list: "{{ plugins | map(attribute='name') | list }}"
+  tags: always
+
+- name: load repo   # noqa 303
+  become_user: "{{ ansible_user | default('root') }}"
+  become: true
+  when: "'Valloric/YouCompleteMe' in plugin_list"
+  command: "git submodule update --init --recursive"
+  args:
+    chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
+    creates: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/third_party/ycmd/build.py"
+  notify: setup YouCompleteMe
+  tags: configure
+
+- name: setup Syntastic
+  when: "'vim-syntastic/syntastic' in plugin_list"
+  become: true
+  package:
+    name:
+      - pylint
+      - pylint3
+      - shellcheck
+      - yamllint
+    state: present
+  tags: configure

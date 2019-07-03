@@ -1,0 +1,19 @@
+---
+
+- name: enable universe repository
+  when: ansible_distribution == "Ubuntu"
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+  loop:
+    - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
+    - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-updates universe"
+    - "deb http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security universe"
+
+- name: update repos (docker)
+  when:
+    - ansible_connection == 'docker'
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'xenial'
+  apt:
+    update_cache: true
