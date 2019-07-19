@@ -28,12 +28,12 @@ call vundle#end()
 
 filetype plugin indent on    " required (vundle) - turns on filetype
 
-" Generic configuration
+" GENERIC CONFIGURATION
 {% for c in configuration %}
-{{ '" %s\n%s' | format(c['name'], c['block']) if 'name' in c else c['block'] -}}
+{{ '" %s\n\n%s' | format(c['name'], c['block']) if 'name' in c else c['block'] -}}
 {% endfor %}
 
-" Custom plugin configuration
+" CUSTOM PLUGIN CONFIGURATION
 {% for plugin in plugins %}
 {%- if 'settings' in plugin -%}
 {{- '" plugin %s\n' | format(plugin['name']) if 'name' in plugin else '' -}}
@@ -41,4 +41,3 @@ filetype plugin indent on    " required (vundle) - turns on filetype
 
 {% endif -%}
 {% endfor %}
-
