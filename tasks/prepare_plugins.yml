@@ -9,24 +9,28 @@
     state: present
   tags: install
 
-- name: prepare plugin facts
+- name: establish plugins   # noqa 401
+  git:
+    repo: "https://github.com/{{ item }}"
+    dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ item | basename }}"
+  loop: "{{ plugins | map(attribute='name') | list }}"
+  register: loaded_plugins
+  tags: configure
+
+- name: prepare new plugin facts
   set_fact:
-    plugin_list: "{{ plugins | map(attribute='name') | list }}"
+    new_plugins: "{{ loaded_plugins['results'] | selectattr('changed') | map(attribute='item') | list }}"
   tags: always
 
-- name: load repo   # noqa 303
-  become_user: "{{ ansible_user | default('root') }}"
-  become: true
-  when: "'Valloric/YouCompleteMe' in plugin_list"
-  command: "git submodule update --init --recursive"
+- name: setup YouCompleteMe     # noqa 301
+  when: "'Valloric/YouCompleteMe' in new_plugins"
+  command: python3 install.py --clang-completer
   args:
     chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
-    creates: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/third_party/ycmd/build.py"
-  notify: setup YouCompleteMe
   tags: configure
 
 - name: setup Syntastic
-  when: "'vim-syntastic/syntastic' in plugin_list"
+  when: "'vim-syntastic/syntastic' in new_plugins"
   become: true
   package:
     name:

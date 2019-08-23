@@ -1,8 +1,0 @@
----
-
-- name: setup YouCompleteMe\
-  become: true
-  become_user: "{{ ansible_user | default('root') }}"
-  command: python3 install.py --clang-completer
-  args:
-    chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"

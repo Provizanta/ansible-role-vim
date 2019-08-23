@@ -12,6 +12,8 @@
               set backspace=indent,eol,start
         plugin_manager: vundle
         plugins:
-          - name: 'Valloric/YouCompleteMe'
-            setttings: |
-              set encoding=utf-8
+          - name: 'vim-scripts/vim-auto-save'
+            settings: |
+              let g:auto_save=1
+              let g:auto_save_in_insert_mode=0
+              let g:auto_save_no_updatetime=5
