@@ -1,6 +1,6 @@
 ---
 
-flavor_info:
+vim_flavor_info:
   vim:
     command: 'vim'
     config:
@@ -17,5 +17,5 @@ flavor_info:
       file: ~/.config/nvim/init.vim
       path: ~/.config/nvim/
 
-plugin_manager_repo:
+vim_plugin_manager_repo:
   vundle: https://github.com/VundleVim/Vundle.vim.git

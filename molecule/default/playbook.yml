@@ -5,13 +5,13 @@
   roles:
     - role: vim
       vars:
-        configuration:
+        vim_configuration:
           - name: configuration block title
             block: |
               set clipboard=unnamed
               set backspace=indent,eol,start
-        plugin_manager: vundle
-        plugins:
+        vim_plugin_manager: vundle
+        vim_plugins:
           - name: 'vim-scripts/vim-auto-save'
             settings: |
               let g:auto_save=1

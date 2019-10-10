@@ -5,28 +5,28 @@
   package:
     name:
       - git
-      - "{{ flavor }}"
+      - "{{ vim_flavor }}"
     state: present
   tags: install
 
 - name: ensure config path presence
   file:
-    path: "{{ flavor_info[flavor]['config']['path'] }}"
+    path: "{{ vim_flavor_info[vim_flavor]['config']['path'] }}"
     state: directory
   tags: install
 
 - name: establish editor configuration
   template:
     src: vimrc.j2
-    dest: "{{ flavor_info[flavor]['config']['file'] }}"
+    dest: "{{ vim_flavor_info[vim_flavor]['config']['file'] }}"
   register: vimrc
   tags: configure
 
 - name: establish plugin manager   # noqa 401
-  when: plugin_manager in plugin_manager_repo
+  when: vim_plugin_manager in vim_plugin_manager_repo
   git:
-    repo: "{{ plugin_manager_repo[plugin_manager] }}"
-    dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ plugin_manager }}"
+    repo: "{{ vim_plugin_manager_repo[vim_plugin_manager] }}"
+    dest: "{{ vim_flavor_info[vim_flavor]['config']['path'] }}/bundle/{{ vim_plugin_manager }}"
     update: true
   tags: configure
 

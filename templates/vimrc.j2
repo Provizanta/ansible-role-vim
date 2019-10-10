@@ -1,17 +1,17 @@
 " {{ ansible_managed }}
 
-{% if plugin_manager == 'vundle' -%}
+{% if vim_plugin_manager == 'vundle' -%}
 set nocompatible     " be iMproved, required (vundle)
 filetype off         " required (vundle), turns off filetype
 
 if has('nvim')
-    let s:editor_root=expand("{{ flavor_info['neovim']['config']['path'] }}")
+    let s:editor_root=expand("{{ vim_flavor_info['neovim']['config']['path'] }}")
 else
-    let s:editor_root=expand("{{ flavor_info['vim']['config']['path'] }}/")
+    let s:editor_root=expand("{{ vim_flavor_info['vim']['config']['path'] }}/")
 endif
 
 " set the runtime path to include Vundle and initialize
-" set rtp+={{ flavor_info[flavor]['config']['path'] }}/bundle/vundle
+" set rtp+={{ vim_flavor_info[vim_flavor]['config']['path'] }}/bundle/vundle
 let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
 
 call vundle#begin(s:editor_root . '/bundle')
@@ -19,7 +19,7 @@ call vundle#begin(s:editor_root . '/bundle')
 Plugin 'VundleVim/Vundle.vim' " let Vundle manage Vundle, required
 
 " custom plugins
-{% for plugin in plugins -%}
+{% for plugin in vim_plugins -%}
 {{ "Plugin '%s'" | format(plugin['name']) }}
 {% endfor %}
 
@@ -29,15 +29,15 @@ call vundle#end()
 filetype plugin indent on    " required (vundle) - turns on filetype
 
 " GENERIC CONFIGURATION
-{% for c in configuration %}
+{% for c in vim_configuration %}
 {{ '" %s\n\n%s' | format(c['name'], c['block']) if 'name' in c else c['block'] -}}
 {% endfor %}
 
 " CUSTOM PLUGIN CONFIGURATION
-{% for plugin in plugins %}
-{%- if 'settings' in plugin -%}
+{% for plugin in vim_plugins %}
+{%-  if 'settings' in plugin -%}
 {{- '" plugin %s\n' | format(plugin['name']) if 'name' in plugin else '' -}}
 {{ plugin['settings'] }}
 
-{% endif -%}
+{%   endif -%}
 {% endfor %}

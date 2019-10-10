@@ -13,18 +13,18 @@ None
 Role Variables
 --------------
 
-These defaults are set in defaults/main.yml:
+These variables are set in [defaults/main.yml](./defaults/main.yml):
 
-    flavor: vim   # vim|vim-gtk3|nvim
+    vim_flavor: vim   # vim|vim-gtk3|nvim
 
-    plugin_manager: vundle
+    vim_plugin_manager: vundle
 
-Non-defaulted variables that can be set:
+These variables do not have default values and can be set:
 
-    configuration:
+    vim_configuration:
       - name: <string, configuration block name>
         block: <string, configuration blocks as multi-line text>
-    plugins:
+    vim_plugins:
       - name: <string, plugin name>
         settings: <string, settings as multi-line text>
 
@@ -36,20 +36,23 @@ None
 Example Playbook
 ----------------
 
-    - hosts: localhost
+    - name: Converge
+      hosts: all
       roles:
         - role: vim
           vars:
-            configuration:
+            vim_configuration:
               - name: configuration block title
                 block: |
                   set clipboard=unnamed
                   set backspace=indent,eol,start
-            plugin_manager: vundle
-            plugins:
-              - name: 'Valloric/YouCompleteMe'
-                setttings: |
-                  set encoding=utf-8
+            vim_plugin_manager: vundle
+            vim_plugins:
+              - name: 'vim-scripts/vim-auto-save'
+                settings: |
+                  let g:auto_save=1
+                  let g:auto_save_in_insert_mode=0
+                  let g:auto_save_no_updatetime=5
 
 License
 -------

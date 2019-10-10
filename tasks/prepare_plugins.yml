@@ -12,25 +12,25 @@
 - name: establish plugins   # noqa 401
   git:
     repo: "https://github.com/{{ item }}"
-    dest: "{{ flavor_info[flavor]['config']['path'] }}/bundle/{{ item | basename }}"
-  loop: "{{ plugins | map(attribute='name') | list }}"
-  register: loaded_plugins
+    dest: "{{ vim_flavor_info[vim_flavor]['config']['path'] }}/bundle/{{ item | basename }}"
+  loop: "{{ vim_plugins | map(attribute='name') | list }}"
+  register: loaded_vim_plugins
   tags: configure
 
 - name: prepare new plugin facts
   set_fact:
-    new_plugins: "{{ loaded_plugins['results'] | selectattr('changed') | map(attribute='item') | list }}"
+    new_vim_plugins: "{{ loaded_vim_plugins['results'] | selectattr('changed') | map(attribute='item') | list }}"
   tags: always
 
 - name: setup YouCompleteMe     # noqa 301
-  when: "'Valloric/YouCompleteMe' in new_plugins"
+  when: "'Valloric/YouCompleteMe' in new_vim_plugins"
   command: python3 install.py --clang-completer
   args:
-    chdir: "{{ flavor_info[flavor]['config']['path'] }}/bundle/YouCompleteMe/"
+    chdir: "{{ vim_flavor_info[vim_flavor]['config']['path'] }}/bundle/YouCompleteMe/"
   tags: configure
 
 - name: setup Syntastic
-  when: "'vim-syntastic/syntastic' in new_plugins"
+  when: "'vim-syntastic/syntastic' in new_vim_plugins"
   become: true
   package:
     name:
