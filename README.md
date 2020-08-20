@@ -1,7 +1,7 @@
 Ansible role: vim
 =========
 
-[![Build Status](https://travis-ci.com/Provizanta/ansible-role-vim.svg?branch=master)](https://travis-ci.com/Provizanta/ansible-role-vim)
+![Build & Deploy](https://github.com/Provizanta/ansible-role-vim/workflows/molecule/badge.svg?branch=master)
 
 Install and configure vim or its flavors (e.g. nvim). Use a specific plugin manager - only 'vundle' is supported at the moment.
 

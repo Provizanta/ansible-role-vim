@@ -8,7 +8,7 @@
       apt:
         update_cache: true
   roles:
-    - role: vim
+    - role: ansible-role-vim
       vars:
         vim_configuration:
           - name: configuration block title
