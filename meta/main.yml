@@ -2,6 +2,7 @@
 
 galaxy_info:
   role_name: vim
+  namespace: provizanta
   author: Tibor Csóka
   description: |
     "Establish vim with the specified plugins and configuration."
