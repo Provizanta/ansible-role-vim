@@ -1,11 +1,11 @@
 ---
 
 - name: establish dependencies
-  become: true
+  become: "{{ (ansible_system == 'Linux') | bool }}"
+  vars:
+    packages: "{{ (ansible_system == 'Darwin') | ternary(['cmake'],['cmake','python3-dev']) }}"
   package:
-    name:
-      - cmake
-      - python3-dev
+    name: "{{ packages }}"
     state: present
   tags: install
 
