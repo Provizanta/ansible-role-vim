@@ -5,6 +5,8 @@ Ansible role: vim
 
 Install and configure vim or its flavors (e.g. nvim). Use a specific plugin manager - only 'vundle' is supported at the moment.
 
+Has basic neovim support in terms of installing the neovim with a basic non-Lua configuration.
+
 Requirements
 ------------
 
@@ -15,7 +17,7 @@ Role Variables
 
 These variables are set in [defaults/main.yml](./defaults/main.yml):
 
-    vim_flavor: vim   # vim|vim-gtk3|nvim
+    vim_flavor: vim         # vim|vim-gtk3|neovim
 
     vim_plugin_manager: vundle
 

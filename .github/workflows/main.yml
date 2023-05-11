@@ -21,7 +21,6 @@ jobs:
         distro:
           - ubuntu2004
           - ubuntu1804
-          - debian9
           - debian10
     steps:
       - name: checkout the repository
