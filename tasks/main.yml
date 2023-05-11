@@ -16,8 +16,12 @@
   tags: install
 
 - name: establish editor configuration
-  template:
-    src: vimrc.j2
+  copy:
+    content: |
+      " WARNING: This file is generated and managed by Ansible
+      "
+
+      {{ vim_configuration }}
     dest: "{{ vim_flavor_info[vim_flavor]['config']['file'] }}"
   register: vimrc
   tags: configure

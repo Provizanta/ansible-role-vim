@@ -21,12 +21,8 @@ These variables are set in [defaults/main.yml](./defaults/main.yml):
 
 These variables do not have default values and can be set:
 
-    vim_configuration:
-      - name: <string, configuration block name>
-        block: <string, configuration blocks as multi-line text>
-    vim_plugins:
-      - name: <string, plugin name>
-        settings: <string, settings as multi-line text>
+    vim_configuration:      # string, contents of the .vimrc file
+
 
 Dependencies
 ------------
@@ -41,18 +37,44 @@ Example Playbook
       roles:
         - role: vim
           vars:
-            vim_configuration:
-              - name: configuration block title
-                block: |
-                  set clipboard=unnamed
-                  set backspace=indent,eol,start
             vim_plugin_manager: vundle
-            vim_plugins:
-              - name: 'vim-scripts/vim-auto-save'
-                settings: |
-                  let g:auto_save=1
-                  let g:auto_save_in_insert_mode=0
-                  let g:auto_save_no_updatetime=5
+            vim_configuration: |
+              " VUNDLE START
+              set nocompatible     " be iMproved, required (vundle)
+              filetype off         " required (vundle), turns off filetype
+
+              if has('nvim')
+                  let s:editor_root=expand("~/.config/nvim/")
+              else
+                  let s:editor_root=expand("~/.vim/")
+              endif
+
+              " set the runtime path to include Vundle and initialize
+              " set rtp+=~/.config/nvim//bundle/vundle
+              let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
+
+              call vundle#begin(s:editor_root . '/bundle')
+
+              Plugin 'VundleVim/Vundle.vim' " let Vundle manage Vundle, required
+
+              " custom plugins
+              Plugin 'editorconfig/editorconfig-vim'
+              Plugin 'vim-scripts/vim-auto-save'
+
+              call vundle#end()
+              filetype plugin indent on    " required (vundle) - turns on filetype
+              " VUNDLE END
+
+              " GENERIC CONFIGURATION
+              " basic configuration
+              set viminfo=
+              set updatetime=200
+
+              " PLUGIN CONFIGURATION
+              " plugin vim-scripts/vim-auto-save
+              let g:auto_save=1
+              let g:auto_save_in_insert_mode=0
+              let g:auto_save_no_updatetime=5
 
 License
 -------
