@@ -13,7 +13,7 @@
   git:
     repo: "https://github.com/{{ item }}"
     dest: "{{ vim_flavor_info[vim_flavor]['config']['path'] }}/bundle/{{ item | basename }}"
-  loop: "{{ vim_plugins | map(attribute='name') | list }}"
+  loop: "{{ vim_configuration | regex_findall(\"'([\\w_\\-.]+/[\\w_\\-.]+)'\") | unique }}"
   register: loaded_vim_plugins
   tags: configure
 

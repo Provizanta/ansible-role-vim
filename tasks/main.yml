@@ -15,13 +15,6 @@
     state: directory
   tags: install
 
-- name: establish editor configuration
-  template:
-    src: vimrc.j2
-    dest: "{{ vim_flavor_info[vim_flavor]['config']['file'] }}"
-  register: vimrc
-  tags: configure
-
 - name: establish plugin manager   # noqa 401
   when: vim_plugin_manager in vim_plugin_manager_repo
   git:
@@ -30,6 +23,20 @@
     update: true
   tags: configure
 
-- when: vimrc.changed
+- name: establish editor configuration
+  when: vim_configuration is defined
+  copy:
+    content: |
+      " WARNING: This file is generated and managed by Ansible
+      "
+
+      {{ vim_configuration }}
+    dest: "{{ vim_flavor_info[vim_flavor]['config']['file'] }}"
+  register: vimrc
+  tags: configure
+
+- when:
+    - vim_configuration is defined
+    - vimrc.changed
   include_tasks: prepare_plugins.yml
   tags: configure

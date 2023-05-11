@@ -25,7 +25,6 @@ galaxy_info:
 
   galaxy_tags:
     - vim
-    - nvim
     - gvim
     - vundle
 
